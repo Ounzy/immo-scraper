@@ -22,18 +22,18 @@ func main() {
 
 		name = strings.ToLower(name)
 		name = strings.Trim(name, " ")
-		r := strings.NewReplacer("ö", "oe", "ü", "ue", "ä", "ae")
+		r := strings.NewReplacer("ö", "oe", "ü", "ue", "ä", "ae", "()", "", " ", "-", "/", "-")
 		name = r.Replace(name)
 
 		nameList = append(nameList, name) // append data to list
 
 	})
 
-	c.Visit("https://www.immobilienscout24.de/wohnen/nordrhein-westfalen,wuppertal.html") // what website do we want to visit/scrape
+	c.Visit("https://www.immobilienscout24.de/wohnen/rheinland-pfalz,zweibruecken.html") // what website do we want to visit/scrape
 
 	fmt.Println(nameList)
 
 	for _, s := range nameList {
-		fmt.Println("{\"nordrhein-westfalen,\", \"wuppertal,\", \"" + s + "\"},")
+		fmt.Println("{\"rheinland-pfalz,\", \"zweibruecken,\", \"" + s + "\"},")
 	}
 }
