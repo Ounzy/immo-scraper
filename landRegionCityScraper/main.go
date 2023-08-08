@@ -29,11 +29,11 @@ func main() {
 
 	})
 
-	c.Visit("https://www.immobilienscout24.de/wohnen/rheinland-pfalz,zweibruecken.html") // what website do we want to visit/scrape
+	c.Visit("https://www.immobilienscout24.de/wohnen/hessen,wiesbaden.html") // what website do we want to visit/scrape
 
 	fmt.Println(nameList)
 
 	for _, s := range nameList {
-		fmt.Println("{\"rheinland-pfalz,\", \"zweibruecken,\", \"" + s + "\"},")
+		fmt.Println("{\"hessen,\", \"wiesbaden,\", \"" + s + "\"},")
 	}
 }
