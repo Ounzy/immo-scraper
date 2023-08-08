@@ -29,11 +29,11 @@ func main() {
 
 	})
 
-	c.Visit("https://www.immobilienscout24.de/wohnen/schleswig-holstein,stormarn-kreis.html") // what website do we want to visit/scrape
+	c.Visit("https://www.immobilienscout24.de/wohnen/hamburg,hamburg.html") // what website do we want to visit/scrape
 
 	fmt.Println(nameList)
 
 	for _, s := range nameList {
-		fmt.Println("{\"schleswig-holstein\", \"stormarn-kreis,\", \"" + s + "\"},")
+		fmt.Println("{\"hamburg\", \"hamburg,\", \"" + s + "\"},")
 	}
 }
