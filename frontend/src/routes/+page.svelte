@@ -12,6 +12,8 @@
     let roomSquareStart;
     let roomNumber;
 
+    
+
     onMount(async () => {
 		getImmoScoutRegions();
 	});
@@ -27,10 +29,26 @@
         }
     }
 
-    function onClickedSearch() {
-        console.log(whatSearch, whereSearch, priceStart, priceEnd)
-    }
+    async function onClickedSearch() {
+        console.log(whatSearch, whereSearch, priceStart)
 
+        const params = {
+            "What":  whatSearch ,
+            "Where":  whereSearch ,
+            "Price":  priceStart ,
+            "Squaremeters":  roomSquareStart ,
+            "RoomNumber" :  parseFloat(roomNumber),
+        };
+        const response = await fetch(baseUrl + "/search", {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(params),
+        });
+        const results = await response.json();
+    }
 
 </script>
 
@@ -85,7 +103,7 @@
         <p>Wohnfläche ab</p><input type="number" bind:value={ roomSquareStart }>
     
     
-        <button type="submit" on:click= { () => onClickedSearch() } >Suchen</button>
+        
 
         <div class="searchOption">
             <form>
@@ -109,7 +127,7 @@
     </div> 
 
 
-
+    <button type="submit" on:click= { () => onClickedSearch() } >Suchen</button>
 
 </header>
 

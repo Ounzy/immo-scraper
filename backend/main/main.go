@@ -29,6 +29,7 @@ func main() {
 	}))
 
 	router.GET("/immoScoutRegions", getImmoScoutRegions)
+	router.POST("/search", postSearchParameters)
 
 	router.Run("localhost:8080")
 }
@@ -48,4 +49,12 @@ func getImmoScoutRegions(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, regions)
+}
+
+func postSearchParameters(c *gin.Context) {
+	var searchParamters entities.SearchParamter
+	if err := c.BindJSON(&searchParamters); err != nil {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"messages": "Invalid input!"})
+	}
+	// Suchergebnisse scrapen
 }
