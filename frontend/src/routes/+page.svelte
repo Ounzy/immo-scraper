@@ -7,7 +7,8 @@
     let immoScoutRegions = [];
 
     let whatSearch = "";
-    let whereSearch = "";
+    let whereSearchHelper;
+    let whereSearch = [];
     let priceStart;
     let roomSquareStart;
     let roomNumber;
@@ -31,7 +32,13 @@
 
     async function onClickedSearch() {
         console.log(whatSearch, whereSearch, priceStart)
-
+        whereSearchHelper = whereSearchHelper.replace(/ / , "")
+        whereSearchHelper = whereSearchHelper.replace(/ / , "")
+        whereSearchHelper = whereSearchHelper.replace(/ / , "")
+        
+        whereSearch = whereSearchHelper.split(",")
+        whereSearch = whereSearch.splice(1, 3)
+        console.log(whereSearchHelper)
         const params = {
             "What":  whatSearch ,
             "Where":  whereSearch ,
@@ -39,6 +46,7 @@
             "Squaremeters":  roomSquareStart ,
             "RoomNumber" :  parseFloat(roomNumber),
         };
+        console.log(params);
         const response = await fetch(baseUrl + "/search", {
             method: 'POST',
             headers: {
@@ -89,7 +97,7 @@
             <form>
                 <!---->
                 <label for="browser">Wo?</label>
-                <input list="whereLocated" name="location" id="location" placeholder="Stadt" bind:value= { whereSearch }>
+                <input list="whereLocated" name="location" id="location" placeholder="Stadt" bind:value= { whereSearchHelper }>
                     <datalist id="whereLocated">
                         { #each immoScoutRegions as { bundesland, kreis, stadt } } 
                         <option value= "{ stadt}, { bundesland } { kreis }" />

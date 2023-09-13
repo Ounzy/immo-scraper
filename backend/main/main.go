@@ -56,5 +56,9 @@ func postSearchParameters(c *gin.Context) {
 	if err := c.BindJSON(&searchParamters); err != nil {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"messages": "Invalid input!"})
 	}
-	// Suchergebnisse scrapen
+	fmt.Println(searchParamters) // nicht im richtigen Sruct
+	var urlToFetch = "https://www.immobilienscout24.de/Suche/de"
+	fmt.Println(urlToFetch)
+	fmt.Println(searchParamters.Where) // funktioniert komisch
+	// Region wird nicht als Array weitergegeben, sondern als string oder so (searchParameters.Where)
 }
