@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strconv"
 
 	"news.com/events/entities"
 	"news.com/events/helper"
@@ -56,9 +57,24 @@ func postSearchParameters(c *gin.Context) {
 	if err := c.BindJSON(&searchParamters); err != nil {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"messages": "Invalid input!"})
 	}
-	fmt.Println(searchParamters) // nicht im richtigen Sruct
-	var urlToFetch = "https://www.immobilienscout24.de/Suche/de"
+	fmt.Println(searchParamters.What)
+	var urlToFetch = "https://www.immobilienscout24.de/Suche/de/" + searchParamters.Where[1] + "/" + searchParamters.Where[2] + "/" + searchParamters.Where[0] + "/"
+
+	if searchParamters.What != "" && searchParamters.Kind != "" {
+		urlToFetch = urlToFetch + searchParamters.What + "-" + searchParamters.Kind + "?"
+	} else {
+		fmt.Println("funnkt nicht")
+	}
+
+	if searchParamters.RoomNumber != 0 {
+		urlToFetch = urlToFetch + "numberofrooms=" + strconv.FormatFloat(searchParamters.RoomNumber, 'f', 0, 64)
+	}
+
+	// if searchParamters.Price
+	// Bisher nur Maximalpreis vorhanden: Minimalpreis muss beim frontend hinzugefügt werden + bei der Pull request
+
+	// https://www.immobilienscout24.de/Suche/de/baden-wuerttemberg/rems-murr-kreis/weinstadt/wohnung-mieten?numberofrooms=2.0-&price=-300000.0&livingspace=10.0
+
 	fmt.Println(urlToFetch)
-	fmt.Println(searchParamters.Where) // funktioniert komisch
-	// Region wird nicht als Array weitergegeben, sondern als string oder so (searchParameters.Where)
+
 }

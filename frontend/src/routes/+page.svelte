@@ -11,7 +11,9 @@
     let whereSearch = [];
     let priceStart;
     let roomSquareStart;
+    let roomNumberHelper;
     let roomNumber;
+    let whatKind;
 
     
 
@@ -31,16 +33,40 @@
     }
 
     async function onClickedSearch() {
-        console.log(whatSearch, whereSearch, priceStart)
+        //console.log(whatSearch, whereSearch, priceStart)
         whereSearchHelper = whereSearchHelper.replace(/ / , "")
         whereSearchHelper = whereSearchHelper.replace(/ / , "")
         whereSearchHelper = whereSearchHelper.replace(/ / , "")
         
         whereSearch = whereSearchHelper.split(",")
-        whereSearch = whereSearch.splice(1, 3)
+        whereSearch.splice(3, 1) // schmeisst falsches raus 
+
+        if (roomNumberHelper == "ab 1 Zimmer") {
+            roomNumber = 1.0;
+        } else if (roomNumberHelper == "ab 1,5 Zimmer") {
+            roomNumber = 1.5;
+        } else if (roomNumberHelper == "ab 2 Zimmer") {
+            roomNumber = 2.0;
+        } else if (roomNumberHelper == "ab 2,5 Zimmer") {
+            roomNumber = 2.5;
+        } else if (roomNumberHelper == "ab 3 Zimmer") {
+            roomNumber = 3.0;
+        } else if (roomNumberHelper == "ab 3,5 Zimmer") {
+            roomNumber = 3.5;
+        } else if (roomNumberHelper == "ab 4 Zimmer") {
+            roomNumber = 4.0;
+        } else if (roomNumberHelper == "ab 5 Zimmer") {
+            roomNumber = 5.0;
+        } else if (roomNumberHelper == "Zimmer egal") {
+            roomNumber = 0;
+        }
+
+        console.log(roomNumber)
+
         console.log(whereSearchHelper)
         const params = {
             "What":  whatSearch ,
+            "Kind":  whatKind,    
             "Where":  whereSearch ,
             "Price":  priceStart ,
             "Squaremeters":  roomSquareStart ,
@@ -96,6 +122,19 @@
         <div class="searchOption">
             <form>
                 <!---->
+                <label for="browser">Art?</label>
+                <input list="houseKind" name="whatKindOfHouse" id="whatKindOfHouse" placeholder="kaufen" bind:value={ whatKind }>
+                    <datalist id="houseKind">
+                        <option value="kaufen">
+                        <option value="mieten">
+                        <option value="bauen">
+                    </datalist>
+            </form>
+        </div>
+
+        <div class="searchOption">
+            <form>
+                <!---->
                 <label for="browser">Wo?</label>
                 <input list="whereLocated" name="location" id="location" placeholder="Stadt" bind:value= { whereSearchHelper }>
                     <datalist id="whereLocated">
@@ -106,9 +145,9 @@
             </form>
         </div>
 
-        <p>Preis ab</p><input type="number" bind:value={ priceStart }>
+        <p>Preis ab</p><input type="number" min="0" bind:value={ priceStart }>
 
-        <p>Wohnfläche ab</p><input type="number" bind:value={ roomSquareStart }>
+        <p>Wohnfläche ab</p><input type="number" min="0" bind:value={ roomSquareStart }>
     
     
         
@@ -117,7 +156,7 @@
             <form>
                 <!---->
                 <label for="browser">Zimmer</label>
-                <input list="numberOfRooms" name="roomNumber" id="roomNumber" placeholder="Zimmer ab" bind:value= { roomNumber }>
+                <input list="numberOfRooms" name="roomNumber" id="roomNumber" placeholder="Zimmer ab" bind:value= { roomNumberHelper }>
                     <datalist id="numberOfRooms">
                         <option value="Zimmer egal"></option>
                         <option value="ab 1 Zimmer"></option>
