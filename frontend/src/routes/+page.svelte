@@ -10,6 +10,7 @@
     let whereSearchHelper;
     let whereSearch = [];
     let priceStart;
+    let priceEnd;
     let roomSquareStart;
     let roomNumberHelper;
     let roomNumber;
@@ -33,56 +34,69 @@
     }
 
     async function onClickedSearch() {
-        //console.log(whatSearch, whereSearch, priceStart)
-        whereSearchHelper = whereSearchHelper.replace(/ / , "")
-        whereSearchHelper = whereSearchHelper.replace(/ / , "")
-        whereSearchHelper = whereSearchHelper.replace(/ / , "")
-        
-        whereSearch = whereSearchHelper.split(",")
-        whereSearch.splice(3, 1) // schmeisst falsches raus 
 
-        if (roomNumberHelper == "ab 1 Zimmer") {
-            roomNumber = 1.0;
-        } else if (roomNumberHelper == "ab 1,5 Zimmer") {
-            roomNumber = 1.5;
-        } else if (roomNumberHelper == "ab 2 Zimmer") {
-            roomNumber = 2.0;
-        } else if (roomNumberHelper == "ab 2,5 Zimmer") {
-            roomNumber = 2.5;
-        } else if (roomNumberHelper == "ab 3 Zimmer") {
-            roomNumber = 3.0;
-        } else if (roomNumberHelper == "ab 3,5 Zimmer") {
-            roomNumber = 3.5;
-        } else if (roomNumberHelper == "ab 4 Zimmer") {
-            roomNumber = 4.0;
-        } else if (roomNumberHelper == "ab 5 Zimmer") {
-            roomNumber = 5.0;
-        } else if (roomNumberHelper == "Zimmer egal") {
-            roomNumber = 0;
-        }
+        //if(priceStart < priceEnd) {
 
-        console.log(roomNumber)
+            console.log("Yes");
 
-        console.log(whereSearchHelper)
-        const params = {
-            "What":  whatSearch ,
-            "Kind":  whatKind,    
-            "Where":  whereSearch ,
-            "Price":  priceStart ,
-            "Squaremeters":  roomSquareStart ,
-            "RoomNumber" :  parseFloat(roomNumber),
-        };
-        console.log(params);
-        const response = await fetch(baseUrl + "/search", {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(params),
-        });
-        const results = await response.json();
+            whereSearchHelper = whereSearchHelper.replace(/ / , "")
+            whereSearchHelper = whereSearchHelper.replace(/ / , "")
+            whereSearchHelper = whereSearchHelper.replace(/ / , "")
+            
+            whereSearch = whereSearchHelper.split(",")
+            whereSearch.splice(3, 1) // schmeisst falsches raus 
+
+            if (roomNumberHelper == "ab 1 Zimmer") {
+                roomNumber = 1.0;
+            } else if (roomNumberHelper == "ab 1,5 Zimmer") {
+                roomNumber = 1.5;
+            } else if (roomNumberHelper == "ab 2 Zimmer") {
+                roomNumber = 2.0;
+            } else if (roomNumberHelper == "ab 2,5 Zimmer") {
+                roomNumber = 2.5;
+            } else if (roomNumberHelper == "ab 3 Zimmer") {
+                roomNumber = 3.0;
+            } else if (roomNumberHelper == "ab 3,5 Zimmer") {
+                roomNumber = 3.5;
+            } else if (roomNumberHelper == "ab 4 Zimmer") {
+                roomNumber = 4.0;
+            } else if (roomNumberHelper == "ab 5 Zimmer") {
+                roomNumber = 5.0;
+            } else if (roomNumberHelper == "Zimmer egal") {
+                roomNumber = 0;
+            }
+
+            
+
+            console.log(roomNumber)
+
+            console.log(whereSearchHelper)
+            const params = {
+                "What":  whatSearch ,
+                "Kind":  whatKind,    
+                "Where":  whereSearch ,
+                "PriceStart":  priceStart ,
+                "PriceEnd":  priceEnd ,
+                "Squaremeters":  roomSquareStart ,
+                "RoomNumber" :  parseFloat(roomNumber),
+            };
+            console.log(params);
+            const response = await fetch(baseUrl + "/search", {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(params),
+            });
+            const results = await response.json();
+        //} else {
+        //    document.querySelector('#priceDiv').innerHTML += "Preis bis muss größer sein als Preis ab"
+        //}
+
     }
+
+        
 
 </script>
 
@@ -145,7 +159,10 @@
             </form>
         </div>
 
-        <p>Preis ab</p><input type="number" min="0" bind:value={ priceStart }>
+        <div id="priceDiv">
+            <p>Preis ab</p><input type="number" min="0" bind:value={ priceStart }>
+            <p>Preis bis</p><input type="number" min="0" bind:value={ priceEnd }>
+        </div>
 
         <p>Wohnfläche ab</p><input type="number" min="0" bind:value={ roomSquareStart }>
     

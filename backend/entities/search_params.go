@@ -4,7 +4,8 @@ type SearchParamter struct {
 	What         string
 	Kind         string
 	Where        []string
-	Price        float64
+	PriceStart   float64
+	PriceEnd     float64
 	Squaremeters int
 	RoomNumber   float64
 }

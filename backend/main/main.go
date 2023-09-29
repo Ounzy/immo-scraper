@@ -14,7 +14,7 @@ import (
 	"github.com/gin-contrib/cors"
 )
 
-const immoScout24BaseUrl = "https://www.immobilienscout24.de/Suche/de/"
+//const immoScout24BaseUrl = "https://www.immobilienscout24.de/Suche/de/"
 
 func main() {
 	x := helper.ImmoScoutRegion[12000]
@@ -57,7 +57,9 @@ func postSearchParameters(c *gin.Context) {
 	if err := c.BindJSON(&searchParamters); err != nil {
 		c.IndentedJSON(http.StatusBadRequest, gin.H{"messages": "Invalid input!"})
 	}
-	fmt.Println(searchParamters.What)
+
+	fmt.Println(searchParamters)
+
 	var urlToFetch = "https://www.immobilienscout24.de/Suche/de/" + searchParamters.Where[1] + "/" + searchParamters.Where[2] + "/" + searchParamters.Where[0] + "/"
 
 	if searchParamters.What != "" && searchParamters.Kind != "" {
@@ -67,11 +69,20 @@ func postSearchParameters(c *gin.Context) {
 	}
 
 	if searchParamters.RoomNumber != 0 {
-		urlToFetch = urlToFetch + "numberofrooms=" + strconv.FormatFloat(searchParamters.RoomNumber, 'f', 0, 64)
+		urlToFetch = urlToFetch + "numberofrooms=" + strconv.FormatFloat(searchParamters.RoomNumber, 'f', 1, 64)
 	}
 
-	// if searchParamters.Price
-	// Bisher nur Maximalpreis vorhanden: Minimalpreis muss beim frontend hinzugefügt werden + bei der Pull request
+	if searchParamters.PriceEnd != 0 && searchParamters.PriceStart != 0 {
+		urlToFetch = urlToFetch + "-&price=" + strconv.FormatFloat(searchParamters.PriceStart, 'f', 2, 64) + "-" + strconv.FormatFloat(searchParamters.PriceEnd, 'f', 2, 64)
+	} else if searchParamters.PriceStart != 0 {
+		urlToFetch = urlToFetch + "-&price=" + strconv.FormatFloat(searchParamters.PriceStart, 'f', 2, 64)
+	} else if searchParamters.PriceEnd != 0 {
+		urlToFetch = urlToFetch + "-&price=-" + strconv.FormatFloat(searchParamters.PriceEnd, 'f', 2, 64)
+	}
+
+	if searchParamters.Squaremeters != 0 {
+		urlToFetch = urlToFetch + "&livingspace=" + strconv.Itoa(searchParamters.Squaremeters)
+	}
 
 	// https://www.immobilienscout24.de/Suche/de/baden-wuerttemberg/rems-murr-kreis/weinstadt/wohnung-mieten?numberofrooms=2.0-&price=-300000.0&livingspace=10.0
 
